@@ -13,11 +13,11 @@ pub struct Champion {
 #[derive(Error, Debug)]
 pub enum SaveToDiskError {
     #[error("serialization error: {source:?}")]
-    SerializationError { source: serde_json::Error },
+    Serialization { source: serde_json::Error },
     #[error("Cannot pen file: {source:?}")]
-    OpenPathError { source: std::io::Error },
+    OpenPath { source: std::io::Error },
     #[error("Cannot write to file: {source:?}")]
-    WriteError { source: std::io::Error },
+    Write { source: std::io::Error },
 }
 
 pub trait ChampionCollection {
@@ -27,12 +27,12 @@ pub trait ChampionCollection {
 impl ChampionCollection for Vec<Champion> {
     fn save_to_disk(self, path: String) -> Result<(), SaveToDiskError> {
         let serialized_champions = serde_json::to_string(&self)
-            .map_err(|err| SaveToDiskError::SerializationError { source: err })?;
+            .map_err(|err| SaveToDiskError::Serialization { source: err })?;
 
         let mut file =
-            File::create(path).map_err(|err| SaveToDiskError::OpenPathError { source: err })?;
+            File::create(path).map_err(|err| SaveToDiskError::OpenPath { source: err })?;
         file.write_all(serialized_champions.as_bytes())
-            .map_err(|err| SaveToDiskError::WriteError { source: err })
+            .map_err(|err| SaveToDiskError::Write { source: err })
     }
 }
 

@@ -12,13 +12,13 @@ pub struct DataFile {
 #[derive(Error, Debug)]
 pub enum GetChampionsError {
     #[error("Set with id {set_id:?} was not found.")]
-    SetNotFoundError { set_id: String },
+    SetNotFound { set_id: String },
 }
 
 impl DataFile {
     pub fn get_champions(self, set_id: String) -> Result<Vec<Champion>, GetChampionsError> {
         match self.sets.get(&set_id) {
-            None => Err(GetChampionsError::SetNotFoundError { set_id }),
+            None => Err(GetChampionsError::SetNotFound { set_id }),
             Some(set) => Ok(set.get_champions()),
         }
     }

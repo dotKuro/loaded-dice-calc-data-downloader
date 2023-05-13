@@ -5,11 +5,11 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum RunError {
     #[error("Failed to download data file: {source:?}")]
-    DownloadError { source: DownloadDataFileError },
+    Download { source: DownloadDataFileError },
     #[error("Failed to retrieve champions from data file: {source:?}")]
-    RetrieveChampionsError { source: GetChampionsError },
+    RetrieveChampions { source: GetChampionsError },
     #[error("Failed to save champion data to disk: {source:?}")]
-    SaveToDiskError { source: SaveToDiskError },
+    SaveToDisk { source: SaveToDiskError },
 }
 
 pub async fn run(
@@ -20,13 +20,13 @@ pub async fn run(
 ) -> Result<(), RunError> {
     let data_file = download_data_file(data_file_url_template, patch)
         .await
-        .map_err(|err| RunError::DownloadError { source: err })?;
+        .map_err(|err| RunError::Download { source: err })?;
 
     let champions = data_file
         .get_champions(set_id)
-        .map_err(|err| RunError::RetrieveChampionsError { source: err })?;
+        .map_err(|err| RunError::RetrieveChampions { source: err })?;
 
     champions
         .save_to_disk(output_path)
-        .map_err(|err| RunError::SaveToDiskError { source: err })
+        .map_err(|err| RunError::SaveToDisk { source: err })
 }

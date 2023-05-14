@@ -1,11 +1,9 @@
 name: Download data for loaded-dice-calc-server
 
-# Running on pull_request for now for debugging purposes
-# on:
-#   push:
-#     branches:
-#       - main
-on: pull_request
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   download-data:
@@ -35,6 +33,9 @@ jobs:
       - name: Download kubectl config.
         run: |
           doctl kubernetes cluster kubeconfig save --expiry-seconds 60 k8s-private-apps
+      - name: Delete old runs of the same job
+        run: |
+          kubectl delete -f deployments/kubernetes/data-downloader-job.yaml
       - name: Apply the job manifest.
         run: |
           kubectl apply -f deployments/kubernetes/data-downloader-job.yaml

@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout the repository.
         uses: actions/checkout@v3
+
+      # Docker image
       - name: Login to the container registry.
         uses: docker/login-action@v2
         with:
@@ -24,3 +26,16 @@ jobs:
         with:
           push: true
           tags: ghcr.io/dotkuro/loaded-dice-calc-data-downloader:latest
+
+      # Kubernetes job
+      - name: Install doctl.
+        uses: digitalocean/action-doctl@v2
+        with:
+          token ${{ secrets.DO_TOKEN }}
+      - name: Download kubectl config.
+        run: |
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 60 k8s-private-apps
+      - name: Apply the job manifest.
+        run: |
+          kubectl apply -f deployments/kubernetes/data-downloader-job.yaml
+

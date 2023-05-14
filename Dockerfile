@@ -2,7 +2,7 @@ FROM rust:1.69.0-alpine AS build
 
 RUN mkdir /app
 WORKDIR /app
-COPY src .
+COPY src ./src
 COPY Cargo.lock .
 COPY Cargo.toml .
 

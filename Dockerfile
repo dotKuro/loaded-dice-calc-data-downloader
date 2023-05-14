@@ -14,4 +14,4 @@ RUN mkdir /app
 WORKDIR /app
 COPY --from=build /app/target/release/loaded-dice-calc-data-downloader .
 
-CMD ["loaded-dice-calc-data-downloader"]
+CMD ["./loaded-dice-calc-data-downloader"]

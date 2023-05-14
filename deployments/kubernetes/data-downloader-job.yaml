@@ -15,6 +15,7 @@ metadata:
 spec:
   template:
     spec:
+      restartPolicy: OnFailure
       containers:
         - name: loaded-dice-calc-data-downloader
           image: ghcr.io/dotkuro/loaded-dice-calc-data-downloader:latest
@@ -28,7 +29,7 @@ spec:
             - name: output_path
               value: /app/data/champions.json
           volumeMounts:
-            - name: volume
+            - name: loaded-dice-calc-server-data
               mountPath: /app/data
       volumes:
         - name: loaded-dice-calc-server-data
@@ -39,11 +40,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: loaded-dice-calc-server-data
+  namespace: loaded-dice-calc-server
   labels:
     app: loaded-dice-calc-server
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi

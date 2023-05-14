@@ -31,7 +31,7 @@ jobs:
       - name: Install doctl.
         uses: digitalocean/action-doctl@v2
         with:
-          token ${{ secrets.DO_TOKEN }}
+          token: ${{ secrets.DO_TOKEN }}
       - name: Download kubectl config.
         run: |
           doctl kubernetes cluster kubeconfig save --expiry-seconds 60 k8s-private-apps

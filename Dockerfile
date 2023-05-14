@@ -6,7 +6,7 @@ COPY src ./src
 COPY Cargo.lock .
 COPY Cargo.toml .
 
-RUN cargo build --release
+RUN RUSTFLAGS='-C target-feature=+crt-static' cargo build --release --target x86_64-unknown-linux-gnu
 
 FROM alpine:3.18.0
 

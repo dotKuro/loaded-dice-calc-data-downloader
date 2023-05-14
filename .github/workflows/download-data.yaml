@@ -23,4 +23,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ghcr.io/dotkuro/loaded-dice-data-downloader:latest
+          tags: ghcr.io/dotkuro/loaded-dice-calc-data-downloader:latest

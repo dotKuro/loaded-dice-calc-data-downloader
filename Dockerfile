@@ -1,4 +1,4 @@
-FROM rust:1.69.0-alpine AS build
+FROM rust:1.69.0 AS build
 
 RUN mkdir /app
 WORKDIR /app

@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loaded-dice-calc-data-downloader
+  namespace: loaded-dice-calc-server
+  labels:
+    app: loaded-dice-calc-server
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: loaded-dice-calc-data-downloader
+          image: ghcr.io/dotkuro/loaded-dice-calc-data-downloader:latest
+          env:
+            - name: DATA_FILE_URL_TEMPLATE
+              value: https://raw.communitydragon.org/{patch}/cdragon/tft/en_us.json
+            - name: PATCH
+              value: "13.9"
+            - name: SET_ID
+              value: "8"
+            - name: OUTPUT_PATH
+              value: /app/data/champions.json
+          volumeMounts:
+            - name: loaded-dice-calc-server-data
+              mountPath: /app/data
+      volumes:
+        - name: loaded-dice-calc-server-data
+          persistentVolumeClaim:
+            claimName: loaded-dice-calc-server-data
